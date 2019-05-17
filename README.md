@@ -1,4 +1,4 @@
-# Minesweeper &emsp;&emsp;&emsp; [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-349bff.svg)](https://www.gnu.org/licenses/gpl-3.0)  [![Python 3](https://img.shields.io/badge/Python-100%25-brightgreen.svg)]()
+# Minesweeper &emsp;&emsp;&emsp; [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-349bff.svg)](https://www.gnu.org/licenses/gpl-3.0)  [![Python 3](https://img.shields.io/badge/Python-100%25-brightgreen.svg)](https://www.python.org/)
 
 Classic game developed in Python just for fun.
 
