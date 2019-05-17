@@ -93,9 +93,9 @@ def run():
             continue
 
         if command[0] == 'E':
-            game.expose(int(command[1]), int(command[2]))
+            game.expose(int(command[1])-1, int(command[2])-1)
         elif command[0] == 'M':
-            game.mark(int(command[1]), int(command[2]))
+            game.mark(int(command[1])-1, int(command[2])-1)
 
         if game.status() == 1:
             win = True

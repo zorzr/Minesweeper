@@ -57,6 +57,8 @@ class Board:
     def expose(self, i, j):
         if 0 <= i < self.rows and 0 <= j < self.cols:
             tile = self.tiles[i*self.cols + j]
+            if tile.marked:
+                return
             tile.covered = False
 
             if tile.is_bomb():
@@ -82,3 +84,15 @@ class Board:
         if set(self.bombs) == set(self.marks):
             return 1
         return 0
+
+    # TODO: refactor
+    def mark_tile(self, index):
+        x = int(index / self.cols)
+        y = index - (x*self.cols)
+        self.mark(x, y)
+
+    # TODO: refactor
+    def expose_tile(self, index):
+        x = int(index / self.cols)
+        y = index - (x*self.cols)
+        self.expose(x, y)
