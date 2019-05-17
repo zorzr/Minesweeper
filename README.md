@@ -8,7 +8,7 @@ Classic game developed in Python just for fun.
 
 - Open a new terminal
 - Run the game by typing	`python cli.py [rows] [cols] [bombs]`	, where:
-- rows:	number of rows in the field
+  - rows:	number of rows in the field
   - cols:  	number of columns in the field
   - bombs:    number of bombs to be put
 - Commands are inserted through the	 `Action: ` 	prompt
