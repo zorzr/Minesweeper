@@ -6,17 +6,21 @@ Classic game developed in Python just for fun.
 
 ## Usage
 
-### Basic GUI (10x10, 16 mines)
+### GUI
 
-- Run the interface.py file in terminal or double click on it
+- Run the `gui.py` file in terminal or double click on it
 > **Note**: &emsp; [Kivy library](https://kivy.org/#home) is required
-- The game window will open
+- The main menu will appear to allow you choose which game you want to play
+  - **Basic**: 9x9 field, 10 bombs (for beginners)
+  - **Intermediate**: 16x16 field, 40 bombs (simple but enjoyable)
+  - **Expert**: 16x30 field, 99 bombs (requires some time)
+> Customizable grid sizes coming soon!
+- The game window will open:
   - **Blue tiles**: covered, left click to expose, right click to mark
   - **Orange tiles**: marked, right click to remove the flag
   - **Numbered tiles**: indicate the number of bombs in the neighborhood
   - **Red crossed tiles**: if you see one, you've lost
 - Enjoy!
-  - Customizable grid size coming soon
 
 ### Command line
 
@@ -36,8 +40,9 @@ Classic game developed in Python just for fun.
 
 ## Features
 
-- Basic GUI
-  - Fixed size field and bomb number
+- GUI
+  - Fixed field sizes and bomb numbers
+  - Three different difficulties
   - Awesome to play
 
 - Command line interface
@@ -49,6 +54,7 @@ Classic game developed in Python just for fun.
 ## Coming soon
 
 - Custom games in the Kivy GUI
+- Better GUI graphics and buttons
 - Winner Winner Sweeper Dinner
 - Any suggestions?
 
