@@ -2,6 +2,7 @@
 
 Classic game developed in Python just for fun.
 
+![Game example](https://i.ibb.co/djtqFtm/ezgif-com-crop.gif)
 
 
 ## Usage
