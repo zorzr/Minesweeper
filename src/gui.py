@@ -1,11 +1,10 @@
-from kivy.config import Config
-Config.set('input', 'mouse', 'mouse,multitouch_on_demand')
-
 from kivy.app import App
+from kivy.clock import Clock
 from kivy.core.window import Window
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.anchorlayout import AnchorLayout
+from kivy.uix.relativelayout import RelativeLayout
 from kivy.uix.button import Button, ButtonBehavior
 from kivy.uix.togglebutton import ToggleButton
 from kivy.uix.widget import Widget
@@ -14,6 +13,10 @@ from kivy.uix.label import Label
 from kivy.uix.popup import Popup
 import webbrowser as web
 from game import Board
+
+# It could be necessary to move these two lines at the beginning
+from kivy.config import Config
+Config.set('input', 'mouse', 'mouse,multitouch_on_demand')
 
 images = {
     "cov": "images/covered.png",
@@ -72,17 +75,23 @@ class GameField(BoxLayout):
 
         grid_anchor = AnchorLayout(anchor_x='left', anchor_y='top')
         buttons_anchor = AnchorLayout(anchor_x='right', anchor_y='top')
-        buttons = BoxLayout(orientation='vertical', spacing=5, size_hint=(None, None), size=(100, 120))
+        buttons = BoxLayout(orientation='vertical', spacing=5, size_hint=(None, None), size=(100, Window.size[1]))
         new_game = Button(text="New game", size_hint=(None, None), size=(100, 30), on_press=lambda _: self.new_game())
         menu = Button(text="Main menu", size_hint=(None, None), size=(100, 30), on_press=lambda _: gui.to_menu())
         mark = ToggleButton(text="Mark", size_hint=(None, None), size=(100, 30))
         mark.bind(state=lambda *_: self.change_mark())
 
+        labels = RelativeLayout()
+        self.status = Label(text="Playing")
+        self.time = TimeLabel(text="00:00", pos=(0, -20))
+        labels.add_widget(self.status)
+        labels.add_widget(self.time)
+
         grid_anchor.add_widget(self.grid)
         buttons.add_widget(mark)
         buttons.add_widget(new_game)
         buttons.add_widget(menu)
-        buttons.add_widget(Widget())
+        buttons.add_widget(labels)
         buttons_anchor.add_widget(buttons)
 
         self.add_widget(grid_anchor)
@@ -95,6 +104,8 @@ class GameField(BoxLayout):
         self.grid.board = Board(self.r, self.c, self.b)
         self.grid.reload_board()
         self.grid.over = False
+        gui.field.time.reset()
+        gui.field.status.text = "Playing"  # TODO: refactor
 
 
 class FieldGrid(GridLayout):
@@ -127,6 +138,7 @@ class FieldGrid(GridLayout):
                 self.children[n_tiles-1-index].change_image("cov")
 
             if self.board.status() == 1:
+                gui.field.status.text = "Win!"  # TODO: refactor
                 self.over = True
         else:
             if tile.marked:
@@ -140,6 +152,7 @@ class FieldGrid(GridLayout):
                 self.reload_board()
             elif self.board.status() == -1:
                 widget.change_image("bomb")
+                gui.field.status.text = "Game over"  # TODO: refactor
                 self.over = True
 
     def reload_board(self):
@@ -181,10 +194,31 @@ class TileButton(ButtonBehavior, Image):
             grid.mark = mark
 
 
+class TimeLabel(Label):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.seconds = 0
+        self.event = Clock.schedule_interval(self.update, 1)
+
+    def update(self, *_):
+        if not gui.field.grid.over and self.seconds < 6000:
+            self.seconds += 1
+            m = str(int(self.seconds / 60)).zfill(2)
+            s = str(self.seconds % 60).zfill(2)
+            self.text = m + ":" + s
+
+    def reset(self):
+        self.seconds = 0
+        self.text = "00:00"
+        self.event.cancel()
+        self.event = Clock.schedule_interval(self.update, 1)
+
+
 class InterfaceManager(BoxLayout):
     def __init__(self, **kwargs):
         super(InterfaceManager, self).__init__(**kwargs)
         self.menu = MainMenu()
+        self.field = None
         self.add_widget(self.menu)
 
     def to_menu(self):
@@ -194,7 +228,8 @@ class InterfaceManager(BoxLayout):
 
     def to_minefield(self, r, c, b):
         self.clear_widgets()
-        self.add_widget(GameField(r, c, b))
+        self.field = GameField(r, c, b)
+        self.add_widget(self.field)
 
     def basic(self):
         Window.size = (350, 220)
